@@ -31,7 +31,7 @@ export function Hero({ onBookNow }: HeroProps) {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8"
           >
             <Star className="w-4 h-4 text-primary fill-primary" />
-            <span className="text-sm font-medium text-primary">Premium Barbershop Experience</span>
+            <span className="text-sm font-medium text-primary">Premium Frizerski Salon</span>
           </motion.div>
 
           {/* Main heading */}
@@ -41,8 +41,8 @@ export function Hero({ onBookNow }: HeroProps) {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-5xl md:text-7xl font-serif font-bold mb-6 text-shadow"
           >
-            Elevate Your
-            <span className="block text-gold-gradient">Style</span>
+            Uzdignite Svoj
+            <span className="block text-gold-gradient">Stil</span>
           </motion.h1>
 
           {/* Subtitle */}
@@ -52,8 +52,8 @@ export function Hero({ onBookNow }: HeroProps) {
             transition={{ duration: 0.6, delay: 0.2 }}
             className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto"
           >
-            Where precision meets artistry. Experience the finest cuts, fades, and grooming 
-            in a modern industrial setting.
+            Gdje preciznost susreće umjetnost. Doživite najfinije frizure, fade-ove i njegu 
+            u modernom industrijskom ambijentu.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -70,7 +70,7 @@ export function Hero({ onBookNow }: HeroProps) {
               className="gap-2"
             >
               <Scissors className="w-5 h-5" />
-              Book Your Cut
+              Rezerviraj Termin
             </Button>
             <Button
               variant="outline-gold"
@@ -79,7 +79,7 @@ export function Hero({ onBookNow }: HeroProps) {
               className="gap-2"
             >
               <Clock className="w-5 h-5" />
-              View Services
+              Pogledaj Usluge
             </Button>
           </motion.div>
 
@@ -88,18 +88,12 @@ export function Hero({ onBookNow }: HeroProps) {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.4 }}
-            className="flex justify-center gap-8 md:gap-16 mt-16"
+            className="flex justify-center mt-16"
           >
-            {[
-              { value: '10+', label: 'Years Experience' },
-              { value: '5000+', label: 'Happy Clients' },
-              { value: '4.9', label: 'Rating' },
-            ].map((stat, index) => (
-              <div key={index} className="text-center">
-                <div className="text-3xl md:text-4xl font-bold text-primary">{stat.value}</div>
-                <div className="text-sm text-muted-foreground mt-1">{stat.label}</div>
-              </div>
-            ))}
+            <div className="text-center">
+              <div className="text-3xl md:text-4xl font-bold text-primary">5+</div>
+              <div className="text-sm text-muted-foreground mt-1">Godina Iskustva</div>
+            </div>
           </motion.div>
         </div>
       </div>
