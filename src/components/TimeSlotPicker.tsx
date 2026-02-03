@@ -1,0 +1,70 @@
+import { motion } from 'framer-motion';
+import { Clock } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+interface TimeSlotPickerProps {
+  selectedTime: string | null;
+  onSelect: (time: string) => void;
+  bookedSlots?: string[];
+}
+
+// Generate time slots from 9 AM to 7 PM
+const generateTimeSlots = () => {
+  const slots: string[] = [];
+  for (let hour = 9; hour <= 19; hour++) {
+    slots.push(`${hour.toString().padStart(2, '0')}:00`);
+    if (hour < 19) {
+      slots.push(`${hour.toString().padStart(2, '0')}:30`);
+    }
+  }
+  return slots;
+};
+
+const formatTime = (time: string) => {
+  const [hours, minutes] = time.split(':');
+  const hour = parseInt(hours);
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  const formattedHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
+  return `${formattedHour}:${minutes} ${ampm}`;
+};
+
+export function TimeSlotPicker({ selectedTime, onSelect, bookedSlots = [] }: TimeSlotPickerProps) {
+  const timeSlots = generateTimeSlots();
+
+  return (
+    <div className="glass-card p-6">
+      <div className="flex items-center gap-2 mb-6">
+        <Clock className="w-5 h-5 text-primary" />
+        <h3 className="font-serif text-xl font-semibold">Select Time</h3>
+      </div>
+
+      <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+        {timeSlots.map(time => {
+          const isBooked = bookedSlots.includes(time);
+          const isSelected = selectedTime === time;
+
+          return (
+            <motion.button
+              key={time}
+              whileHover={{ scale: isBooked ? 1 : 1.05 }}
+              whileTap={{ scale: isBooked ? 1 : 0.95 }}
+              onClick={() => !isBooked && onSelect(time)}
+              disabled={isBooked}
+              className={cn(
+                'time-slot',
+                isSelected && 'selected',
+                isBooked && 'opacity-40 cursor-not-allowed line-through'
+              )}
+            >
+              {formatTime(time)}
+            </motion.button>
+          );
+        })}
+      </div>
+
+      <p className="text-sm text-muted-foreground mt-4 text-center">
+        All times are in your local timezone
+      </p>
+    </div>
+  );
+}
