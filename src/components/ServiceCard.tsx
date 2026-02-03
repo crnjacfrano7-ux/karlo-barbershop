@@ -44,7 +44,7 @@ export function ServiceCard({ service, selected, onSelect }: ServiceCardProps) {
       
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Clock className="w-4 h-4" />
-        <span>{service.duration_minutes} minutes</span>
+        <span>30 minuta</span>
       </div>
 
       {selected && (

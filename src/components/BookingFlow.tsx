@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Check, Calendar, User, Scissors } from 'lucide-react';
-import { format } from 'date-fns';
+import { format, isSaturday } from 'date-fns';
+import { hr } from 'date-fns/locale';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
@@ -13,10 +14,10 @@ import { DatePicker } from './DatePicker';
 import { TimeSlotPicker } from './TimeSlotPicker';
 
 const steps = [
-  { id: 1, title: 'Select Service', icon: Scissors },
-  { id: 2, title: 'Choose Barber', icon: User },
-  { id: 3, title: 'Pick Date & Time', icon: Calendar },
-  { id: 4, title: 'Confirm', icon: Check },
+  { id: 1, title: 'Odaberi Uslugu', icon: Scissors },
+  { id: 2, title: 'Odaberi Frizera', icon: User },
+  { id: 3, title: 'Datum i Vrijeme', icon: Calendar },
+  { id: 4, title: 'Potvrda', icon: Check },
 ];
 
 interface BookingFlowProps {
@@ -123,14 +124,14 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
       if (error) throw error;
 
       toast({
-        title: 'Booking Confirmed!',
-        description: `Your appointment with ${booking.barber.name} is set for ${format(booking.date, 'MMMM d, yyyy')} at ${booking.time}.`,
+        title: 'Rezervacija Potvrđena!',
+        description: `Vaš termin kod ${booking.barber.name} je zakazan za ${format(booking.date, 'd. MMMM yyyy.', { locale: hr })} u ${booking.time}.`,
       });
       onComplete();
     } catch (error) {
       toast({
-        title: 'Booking Failed',
-        description: 'There was an error creating your appointment. Please try again.',
+        title: 'Rezervacija Neuspješna',
+        description: 'Došlo je do greške pri kreiranju termina. Molimo pokušajte ponovo.',
         variant: 'destructive',
       });
     } finally {
@@ -209,7 +210,7 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
         >
           {booking.step === 1 && (
             <div className="space-y-4">
-              <h2 className="text-2xl font-serif font-bold mb-6">Choose Your Service</h2>
+              <h2 className="text-2xl font-serif font-bold mb-6">Odaberi Uslugu</h2>
               <div className="grid gap-4 md:grid-cols-2">
                 {services.map(service => (
                   <ServiceCard
@@ -225,7 +226,7 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
 
           {booking.step === 2 && (
             <div className="space-y-4">
-              <h2 className="text-2xl font-serif font-bold mb-6">Choose Your Barber</h2>
+              <h2 className="text-2xl font-serif font-bold mb-6">Odaberi Frizera</h2>
               <div className="grid gap-4 grid-cols-2 md:grid-cols-3">
                 {barbers.map(barber => (
                   <BarberCard
@@ -241,7 +242,7 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
 
           {booking.step === 3 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-serif font-bold mb-6">Pick Date & Time</h2>
+              <h2 className="text-2xl font-serif font-bold mb-6">Odaberi Datum i Vrijeme</h2>
               <div className="grid gap-6 lg:grid-cols-2">
                 <DatePicker
                   selected={booking.date}
@@ -252,6 +253,7 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
                     selectedTime={booking.time}
                     onSelect={(time) => setBooking(prev => ({ ...prev, time }))}
                     bookedSlots={bookedSlots}
+                    isSaturday={isSaturday(booking.date)}
                   />
                 )}
               </div>
@@ -260,29 +262,33 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
 
           {booking.step === 4 && (
             <div className="space-y-6">
-              <h2 className="text-2xl font-serif font-bold mb-6">Confirm Your Booking</h2>
+              <h2 className="text-2xl font-serif font-bold mb-6">Potvrdi Rezervaciju</h2>
               <div className="glass-card p-8">
                 <div className="space-y-6">
                   <div className="flex justify-between items-center pb-4 border-b border-border">
-                    <span className="text-muted-foreground">Service</span>
+                    <span className="text-muted-foreground">Usluga</span>
                     <span className="font-semibold">{booking.service?.name}</span>
                   </div>
                   <div className="flex justify-between items-center pb-4 border-b border-border">
-                    <span className="text-muted-foreground">Barber</span>
+                    <span className="text-muted-foreground">Frizer</span>
                     <span className="font-semibold">{booking.barber?.name}</span>
                   </div>
                   <div className="flex justify-between items-center pb-4 border-b border-border">
-                    <span className="text-muted-foreground">Date</span>
+                    <span className="text-muted-foreground">Datum</span>
                     <span className="font-semibold">
-                      {booking.date && format(booking.date, 'EEEE, MMMM d, yyyy')}
+                      {booking.date && format(booking.date, 'EEEE, d. MMMM yyyy.', { locale: hr })}
                     </span>
                   </div>
                   <div className="flex justify-between items-center pb-4 border-b border-border">
-                    <span className="text-muted-foreground">Time</span>
+                    <span className="text-muted-foreground">Vrijeme</span>
                     <span className="font-semibold">{booking.time}</span>
                   </div>
+                  <div className="flex justify-between items-center pb-4 border-b border-border">
+                    <span className="text-muted-foreground">Trajanje</span>
+                    <span className="font-semibold">30 minuta</span>
+                  </div>
                   <div className="flex justify-between items-center pt-2">
-                    <span className="text-lg font-semibold">Total</span>
+                    <span className="text-lg font-semibold">Ukupno</span>
                     <span className="text-3xl font-bold text-primary">
                       {booking.service?.price} BAM
                     </span>
@@ -303,7 +309,7 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
           className="gap-2"
         >
           <ArrowLeft className="w-4 h-4" />
-          Back
+          Nazad
         </Button>
 
         {booking.step < 4 ? (
@@ -313,7 +319,7 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
             disabled={!canProceed()}
             className="gap-2"
           >
-            {booking.step === 3 && !user ? 'Sign In to Continue' : 'Next'}
+            {booking.step === 3 && !user ? 'Prijavi se za nastavak' : 'Dalje'}
             <ArrowRight className="w-4 h-4" />
           </Button>
         ) : (
@@ -323,7 +329,7 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
             disabled={loading}
             className="gap-2"
           >
-            {loading ? 'Booking...' : 'Confirm Booking'}
+            {loading ? 'Rezervacija...' : 'Potvrdi Rezervaciju'}
             <Check className="w-4 h-4" />
           </Button>
         )}

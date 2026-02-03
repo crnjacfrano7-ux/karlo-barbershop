@@ -6,36 +6,44 @@ interface TimeSlotPickerProps {
   selectedTime: string | null;
   onSelect: (time: string) => void;
   bookedSlots?: string[];
+  isSaturday?: boolean;
 }
 
-// Generate time slots from 9 AM to 7 PM
-const generateTimeSlots = () => {
+// Generate time slots based on day
+const generateTimeSlots = (isSaturday: boolean) => {
   const slots: string[] = [];
-  for (let hour = 9; hour <= 19; hour++) {
-    slots.push(`${hour.toString().padStart(2, '0')}:00`);
-    if (hour < 19) {
-      slots.push(`${hour.toString().padStart(2, '0')}:30`);
+  const startHour = isSaturday ? 8 : 8;
+  const startMinute = isSaturday ? 0 : 30;
+  const endHour = isSaturday ? 14 : 18;
+  
+  let hour = startHour;
+  let minute = startMinute;
+  
+  while (hour < endHour || (hour === endHour && minute === 0)) {
+    slots.push(`${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`);
+    minute += 30;
+    if (minute >= 60) {
+      minute = 0;
+      hour += 1;
     }
   }
+  
   return slots;
 };
 
 const formatTime = (time: string) => {
   const [hours, minutes] = time.split(':');
-  const hour = parseInt(hours);
-  const ampm = hour >= 12 ? 'PM' : 'AM';
-  const formattedHour = hour > 12 ? hour - 12 : hour === 0 ? 12 : hour;
-  return `${formattedHour}:${minutes} ${ampm}`;
+  return `${hours}:${minutes}`;
 };
 
-export function TimeSlotPicker({ selectedTime, onSelect, bookedSlots = [] }: TimeSlotPickerProps) {
-  const timeSlots = generateTimeSlots();
+export function TimeSlotPicker({ selectedTime, onSelect, bookedSlots = [], isSaturday = false }: TimeSlotPickerProps) {
+  const timeSlots = generateTimeSlots(isSaturday);
 
   return (
     <div className="glass-card p-6">
       <div className="flex items-center gap-2 mb-6">
         <Clock className="w-5 h-5 text-primary" />
-        <h3 className="font-serif text-xl font-semibold">Select Time</h3>
+        <h3 className="font-serif text-xl font-semibold">Odaberi Vrijeme</h3>
       </div>
 
       <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
@@ -63,7 +71,7 @@ export function TimeSlotPicker({ selectedTime, onSelect, bookedSlots = [] }: Tim
       </div>
 
       <p className="text-sm text-muted-foreground mt-4 text-center">
-        All times are in your local timezone
+        Sva vremena su u vašoj vremenskoj zoni
       </p>
     </div>
   );

@@ -67,10 +67,10 @@ const Index = () => {
             <div className="container mx-auto px-4">
               <div className="text-center mb-12">
                 <span className="text-primary text-sm font-medium uppercase tracking-wider">
-                  Book Now
+                  Rezerviraj Sada
                 </span>
                 <h2 className="text-4xl md:text-5xl font-serif font-bold mt-3">
-                  Reserve Your Spot
+                  Rezerviraj Termin
                 </h2>
               </div>
               <BookingFlow

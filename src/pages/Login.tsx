@@ -29,14 +29,14 @@ export default function Login() {
       if (error) throw error;
 
       toast({
-        title: 'Welcome back!',
-        description: 'You have successfully signed in.',
+        title: 'Dobrodošli natrag!',
+        description: 'Uspješno ste se prijavili.',
       });
       navigate(returnTo);
     } catch (error: any) {
       toast({
-        title: 'Sign in failed',
-        description: error.message || 'Invalid email or password.',
+        title: 'Prijava neuspješna',
+        description: error.message || 'Pogrešan email ili lozinka.',
         variant: 'destructive',
       });
     } finally {
@@ -59,10 +59,10 @@ export default function Login() {
 
         <div className="glass-card p-8">
           <h1 className="text-2xl font-serif font-bold text-center mb-2">
-            Welcome Back
+            Dobrodošli Natrag
           </h1>
           <p className="text-muted-foreground text-center mb-8">
-            Sign in to manage your bookings
+            Prijavite se za upravljanje rezervacijama
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
@@ -73,7 +73,7 @@ export default function Login() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder="vas@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10 input-dark"
@@ -83,7 +83,7 @@ export default function Login() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Lozinka</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
@@ -112,21 +112,21 @@ export default function Login() {
               className="w-full"
               disabled={loading}
             >
-              {loading ? 'Signing in...' : 'Sign In'}
+              {loading ? 'Prijava...' : 'Prijavi se'}
             </Button>
           </form>
 
           <p className="text-center text-sm text-muted-foreground mt-6">
-            Don't have an account?{' '}
+            Nemate račun?{' '}
             <Link to="/signup" className="text-primary hover:underline">
-              Sign up
+              Registrirajte se
             </Link>
           </p>
         </div>
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           <Link to="/" className="hover:text-primary">
-            ← Back to home
+            ← Povratak na početnu
           </Link>
         </p>
       </motion.div>

@@ -31,13 +31,13 @@ export function BarbersSection() {
           className="text-center mb-16"
         >
           <span className="text-primary text-sm font-medium uppercase tracking-wider">
-            Meet The Team
+            Upoznajte Tim
           </span>
           <h2 className="text-4xl md:text-5xl font-serif font-bold mt-3 mb-4">
-            Master Barbers
+            Majstori Frizeri
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            Our talented team brings years of experience and passion to every cut.
+            Naš talentirani tim donosi godine iskustva i strast u svaku frizuru.
           </p>
         </motion.div>
 
@@ -60,7 +60,7 @@ export function BarbersSection() {
                   />
                 </div>
                 <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 px-4 py-1 bg-primary rounded-full">
-                  <span className="text-xs font-medium text-primary-foreground">Expert</span>
+                  <span className="text-xs font-medium text-primary-foreground">Stručnjak</span>
                 </div>
               </div>
 

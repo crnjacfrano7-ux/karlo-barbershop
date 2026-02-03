@@ -27,14 +27,14 @@ export default function Signup() {
       if (error) throw error;
 
       toast({
-        title: 'Account created!',
-        description: 'Please check your email to verify your account.',
+        title: 'Račun kreiran!',
+        description: 'Molimo provjerite email za potvrdu računa.',
       });
       navigate('/login');
     } catch (error: any) {
       toast({
-        title: 'Sign up failed',
-        description: error.message || 'Something went wrong. Please try again.',
+        title: 'Registracija neuspješna',
+        description: error.message || 'Nešto je pošlo po zlu. Molimo pokušajte ponovo.',
         variant: 'destructive',
       });
     } finally {
@@ -57,21 +57,21 @@ export default function Signup() {
 
         <div className="glass-card p-8">
           <h1 className="text-2xl font-serif font-bold text-center mb-2">
-            Create Account
+            Kreiraj Račun
           </h1>
           <p className="text-muted-foreground text-center mb-8">
-            Join us for the premium grooming experience
+            Pridružite nam se za premium frizersko iskustvo
           </p>
 
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-2">
-              <Label htmlFor="fullName">Full Name</Label>
+              <Label htmlFor="fullName">Puno Ime</Label>
               <div className="relative">
                 <User className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
                   id="fullName"
                   type="text"
-                  placeholder="John Doe"
+                  placeholder="Ivan Horvat"
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   className="pl-10 input-dark"
@@ -87,7 +87,7 @@ export default function Signup() {
                 <Input
                   id="email"
                   type="email"
-                  placeholder="you@example.com"
+                  placeholder="vas@email.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10 input-dark"
@@ -97,7 +97,7 @@ export default function Signup() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="password">Password</Label>
+              <Label htmlFor="password">Lozinka</Label>
               <div className="relative">
                 <Lock className="absolute left-3 top-1/2 -translate-y-1/2 w-5 h-5 text-muted-foreground" />
                 <Input
@@ -119,7 +119,7 @@ export default function Signup() {
                 </button>
               </div>
               <p className="text-xs text-muted-foreground">
-                Password must be at least 6 characters
+                Lozinka mora imati najmanje 6 znakova
               </p>
             </div>
 
@@ -130,21 +130,21 @@ export default function Signup() {
               className="w-full"
               disabled={loading}
             >
-              {loading ? 'Creating account...' : 'Create Account'}
+              {loading ? 'Kreiranje računa...' : 'Kreiraj Račun'}
             </Button>
           </form>
 
           <p className="text-center text-sm text-muted-foreground mt-6">
-            Already have an account?{' '}
+            Već imate račun?{' '}
             <Link to="/login" className="text-primary hover:underline">
-              Sign in
+              Prijavite se
             </Link>
           </p>
         </div>
 
         <p className="text-center text-sm text-muted-foreground mt-6">
           <Link to="/" className="hover:text-primary">
-            ← Back to home
+            ← Povratak na početnu
           </Link>
         </p>
       </motion.div>

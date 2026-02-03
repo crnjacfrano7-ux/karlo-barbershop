@@ -13,27 +13,27 @@ export function Footer() {
               <span className="font-serif text-xl font-bold">The Cut Lab</span>
             </Link>
             <p className="text-muted-foreground text-sm">
-              Premium barbershop experience with expert barbers and modern styling.
+              Premium frizerski salon s iskusnim frizerom i modernim stilom.
             </p>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-serif font-semibold mb-4">Quick Links</h4>
+            <h4 className="font-serif font-semibold mb-4">Brzi Linkovi</h4>
             <ul className="space-y-2">
               <li>
                 <a href="#services" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-                  Services
+                  Usluge
                 </a>
               </li>
               <li>
                 <a href="#barbers" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-                  Our Team
+                  Naš Tim
                 </a>
               </li>
               <li>
                 <Link to="/login" className="text-muted-foreground hover:text-primary transition-colors text-sm">
-                  Sign In
+                  Prijava
                 </Link>
               </li>
             </ul>
@@ -41,39 +41,39 @@ export function Footer() {
 
           {/* Contact */}
           <div>
-            <h4 className="font-serif font-semibold mb-4">Contact</h4>
+            <h4 className="font-serif font-semibold mb-4">Kontakt</h4>
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-muted-foreground text-sm">
                 <MapPin className="w-4 h-4 text-primary" />
-                123 Style Street, NY 10001
+                Biskupa Čule bb, Mostar
               </li>
               <li className="flex items-center gap-2 text-muted-foreground text-sm">
                 <Phone className="w-4 h-4 text-primary" />
-                (555) 123-4567
+                063 629-436
               </li>
             </ul>
           </div>
 
           {/* Hours */}
           <div>
-            <h4 className="font-serif font-semibold mb-4">Hours</h4>
+            <h4 className="font-serif font-semibold mb-4">Radno Vrijeme</h4>
             <ul className="space-y-2">
               <li className="flex items-center gap-2 text-muted-foreground text-sm">
                 <Clock className="w-4 h-4 text-primary" />
-                <span>Mon - Fri: 9AM - 7PM</span>
+                <span>Pon - Pet: 8:30 - 18:00</span>
               </li>
               <li className="text-muted-foreground text-sm pl-6">
-                Sat: 9AM - 6PM
+                Sub: 8:00 - 14:00
               </li>
               <li className="text-muted-foreground text-sm pl-6">
-                Sun: 10AM - 4PM
+                Ned: Zatvoreno
               </li>
             </ul>
           </div>
         </div>
 
         <div className="border-t border-border mt-12 pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} The Cut Lab. All rights reserved.</p>
+          <p>&copy; {new Date().getFullYear()} The Cut Lab. Sva prava pridržana.</p>
         </div>
       </div>
     </footer>

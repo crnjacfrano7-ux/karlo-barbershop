@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { format } from 'date-fns';
+import { hr } from 'date-fns/locale';
 import { 
   Scissors, 
   Calendar, 
@@ -116,6 +117,23 @@ export default function Dashboard() {
     }
   };
 
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'confirmed': return 'Potvrđeno';
+      case 'pending': return 'Na čekanju';
+      case 'completed': return 'Završeno';
+      case 'cancelled': return 'Otkazano';
+      default: return status;
+    }
+  };
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Dobro Jutro';
+    if (hour < 18) return 'Dobar Dan';
+    return 'Dobra Večer';
+  };
+
   if (authLoading || roleLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
@@ -136,11 +154,11 @@ export default function Dashboard() {
                 <span className="font-serif text-xl font-bold">The Cut Lab</span>
               </Link>
               <span className="text-muted-foreground">|</span>
-              <span className="text-sm font-medium">Dashboard</span>
+              <span className="text-sm font-medium">Nadzorna Ploča</span>
             </div>
             <Button variant="ghost" size="sm" onClick={() => navigate('/')}>
               <ChevronLeft className="w-4 h-4 mr-1" />
-              Back to site
+              Povratak
             </Button>
           </div>
         </div>
@@ -154,10 +172,10 @@ export default function Dashboard() {
           className="mb-8"
         >
           <h1 className="text-3xl font-serif font-bold">
-            Good {new Date().getHours() < 12 ? 'Morning' : new Date().getHours() < 18 ? 'Afternoon' : 'Evening'}
+            {getGreeting()}
           </h1>
           <p className="text-muted-foreground">
-            Here's your schedule for {format(new Date(), 'EEEE, MMMM d, yyyy')}
+            Evo vašeg rasporeda za {format(new Date(), 'EEEE, d. MMMM yyyy.', { locale: hr })}
           </p>
         </motion.div>
 
@@ -174,7 +192,7 @@ export default function Dashboard() {
                 <Calendar className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Today's Appointments</p>
+                <p className="text-sm text-muted-foreground">Današnji Termini</p>
                 <p className="text-3xl font-bold">{appointments.length}</p>
               </div>
             </div>
@@ -191,7 +209,7 @@ export default function Dashboard() {
                 <DollarSign className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Projected Revenue</p>
+                <p className="text-sm text-muted-foreground">Očekivani Prihod</p>
                 <p className="text-3xl font-bold">{totalRevenue.toFixed(2)} BAM</p>
               </div>
             </div>
@@ -208,7 +226,7 @@ export default function Dashboard() {
                 <Users className="w-6 h-6 text-primary" />
               </div>
               <div>
-                <p className="text-sm text-muted-foreground">Unique Clients</p>
+                <p className="text-sm text-muted-foreground">Jedinstveni Klijenti</p>
                 <p className="text-3xl font-bold">
                   {new Set(appointments.map(a => a.user_id)).size}
                 </p>
@@ -225,10 +243,10 @@ export default function Dashboard() {
           className="glass-card"
         >
           <div className="p-6 border-b border-border flex items-center justify-between">
-            <h2 className="font-serif text-xl font-bold">Appointment Feed</h2>
+            <h2 className="font-serif text-xl font-bold">Popis Termina</h2>
             <Button variant="ghost" size="sm" onClick={fetchAppointments}>
               <RefreshCw className={`w-4 h-4 mr-1 ${loading ? 'animate-spin' : ''}`} />
-              Refresh
+              Osvježi
             </Button>
           </div>
 
@@ -240,9 +258,9 @@ export default function Dashboard() {
             ) : appointments.length === 0 ? (
               <div className="text-center py-12">
                 <Calendar className="w-12 h-12 text-muted-foreground mx-auto mb-4" />
-                <h3 className="font-semibold mb-2">No appointments today</h3>
+                <h3 className="font-semibold mb-2">Nema termina danas</h3>
                 <p className="text-muted-foreground text-sm">
-                  Enjoy your break or check back later for new bookings.
+                  Uživajte u pauzi ili provjerite kasnije za nove rezervacije.
                 </p>
               </div>
             ) : (
@@ -263,7 +281,7 @@ export default function Dashboard() {
                         </div>
                         <div>
                           <p className="font-semibold">
-                            {appointment.profile?.full_name || 'Guest'}
+                            {appointment.profile?.full_name || 'Gost'}
                           </p>
                           <p className="text-sm text-muted-foreground">
                             {appointment.service?.name}
@@ -272,7 +290,7 @@ export default function Dashboard() {
                       </div>
                       <div className="flex items-center gap-4">
                         <Badge className={getStatusColor(appointment.status)}>
-                          {appointment.status}
+                          {getStatusText(appointment.status)}
                         </Badge>
                         <span className="font-bold text-primary">
                           {Number(appointment.service?.price).toFixed(2)} BAM

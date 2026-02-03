@@ -37,14 +37,14 @@ export function ServicesSection({ onSelectService }: ServicesSectionProps) {
           className="text-center mb-16"
         >
           <span className="text-primary text-sm font-medium uppercase tracking-wider">
-            Our Services
+            Naše Usluge
           </span>
           <h2 className="text-4xl md:text-5xl font-serif font-bold mt-3 mb-4">
-            Premium Grooming
+            Premium Njega
           </h2>
           <p className="text-muted-foreground max-w-2xl mx-auto">
-            From classic cuts to modern fades, our expert barbers deliver precision 
-            and style in every service.
+            Od klasičnih frizura do modernih fade-ova, naši stručni frizeri pružaju 
+            preciznost i stil u svakoj usluzi.
           </p>
         </motion.div>
 

@@ -42,13 +42,13 @@ export function Header() {
           {/* Desktop Nav */}
           <nav className="hidden md:flex items-center gap-6">
             <Link to="/" className="text-sm font-medium hover:text-primary transition-colors">
-              Home
+              Početna
             </Link>
             <a href="#services" className="text-sm font-medium hover:text-primary transition-colors">
-              Services
+              Usluge
             </a>
             <a href="#barbers" className="text-sm font-medium hover:text-primary transition-colors">
-              Our Team
+              Naš Tim
             </a>
             
             {user ? (
@@ -56,7 +56,7 @@ export function Header() {
                 <DropdownMenuTrigger asChild>
                   <Button variant="outline-gold" size="sm" className="gap-2">
                     <User className="w-4 h-4" />
-                    Account
+                    Račun
                   </Button>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48">
@@ -68,24 +68,24 @@ export function Header() {
                     <>
                       <DropdownMenuItem onClick={() => navigate('/dashboard')}>
                         <LayoutDashboard className="w-4 h-4 mr-2" />
-                        Dashboard
+                        Nadzorna Ploča
                       </DropdownMenuItem>
                       <DropdownMenuSeparator />
                     </>
                   )}
                   <DropdownMenuItem onClick={handleSignOut}>
                     <LogOut className="w-4 h-4 mr-2" />
-                    Sign Out
+                    Odjava
                   </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             ) : (
               <div className="flex items-center gap-2">
                 <Button variant="ghost" size="sm" onClick={() => navigate('/login')}>
-                  Sign In
+                  Prijava
                 </Button>
                 <Button variant="gold" size="sm" onClick={() => navigate('/signup')}>
-                  Book Now
+                  Rezerviraj
                 </Button>
               </div>
             )}
@@ -113,21 +113,21 @@ export function Header() {
                 className="text-sm font-medium hover:text-primary transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Home
+                Početna
               </Link>
               <a
                 href="#services"
                 className="text-sm font-medium hover:text-primary transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Services
+                Usluge
               </a>
               <a
                 href="#barbers"
                 className="text-sm font-medium hover:text-primary transition-colors"
                 onClick={() => setMobileMenuOpen(false)}
               >
-                Our Team
+                Naš Tim
               </a>
               
               {user ? (
@@ -140,11 +140,11 @@ export function Header() {
                         setMobileMenuOpen(false);
                       }}
                     >
-                      Dashboard
+                      Nadzorna Ploča
                     </Button>
                   )}
                   <Button variant="ghost" onClick={handleSignOut}>
-                    Sign Out
+                    Odjava
                   </Button>
                 </>
               ) : (
@@ -156,7 +156,7 @@ export function Header() {
                       setMobileMenuOpen(false);
                     }}
                   >
-                    Sign In
+                    Prijava
                   </Button>
                   <Button
                     variant="gold"
@@ -165,7 +165,7 @@ export function Header() {
                       setMobileMenuOpen(false);
                     }}
                   >
-                    Book Now
+                    Rezerviraj
                   </Button>
                 </>
               )}
