@@ -38,9 +38,11 @@ export function ServiceCard({ service, selected, onSelect }: ServiceCardProps) {
         </span>
       </div>
       
-      <p className="text-muted-foreground text-sm mb-4">
-        {service.description}
-      </p>
+      {service.description && (
+        <p className="text-muted-foreground text-sm mb-4">
+          {service.description}
+        </p>
+      )}
       
       <div className="flex items-center gap-2 text-sm text-muted-foreground">
         <Clock className="w-4 h-4" />
