@@ -9,8 +9,8 @@ export function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <Scissors className="w-8 h-8 text-primary" />
-              <span className="font-serif text-xl font-bold">The Cut Lab</span>
+              <img src="/favicon.jpeg" alt="Meštar Barber Shop" className="w-10 h-10 object-contain" />
+              <span className="font-serif text-xl font-bold">Meštar Barber Shop</span>
             </Link>
             <p className="text-muted-foreground text-sm">
               Premium frizerski salon s iskusnim frizerom i modernim stilom.
@@ -73,7 +73,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-border mt-12 pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} The Cut Lab. Sva prava pridržana.</p>
+          <p>&copy; {new Date().getFullYear()} Meštar Barber Shop. Sva prava pridržana.</p>
         </div>
       </div>
     </footer>
