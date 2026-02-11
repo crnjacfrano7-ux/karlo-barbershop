@@ -190,9 +190,9 @@ CREATE TRIGGER on_auth_user_created
 
 -- Insert initial barbers
 INSERT INTO public.barbers (name, bio, avatar_url, specialties) VALUES
-  ('Alex Martinez', 'Master barber with 10+ years of experience. Specializes in classic cuts and fades.', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face', ARRAY['Classic Cuts', 'Fades', 'Hot Towel Shaves']),
-  ('Marco Rivera', 'Precision expert with a passion for modern styles. Known for his attention to detail.', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&h=300&fit=crop&crop=face', ARRAY['Modern Styles', 'Beard Design', 'Skin Fades']),
-  ('Elias Thompson', 'Creative stylist bringing fresh trends. Expert in beard styling and grooming.', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop&crop=face', ARRAY['Beard Styling', 'Trendy Cuts', 'Hair Design']);
+  ('GABI', 'Voli sisat i mirisat noge.', 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=300&h=300&fit=crop&crop=face', ARRAY['Classic Cuts', 'Fades', 'Hot Towel Shaves']),
+  ('FRANJO', 'Uz sisanje dobijas pobjednicki tiket gratis.', 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=300&h=300&fit=crop&crop=face', ARRAY['Modern Styles', 'Beard Design', 'Skin Fades']),
+  ('VASKE', 'Bitanga...', 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=300&h=300&fit=crop&crop=face', ARRAY['Beard Styling', 'Trendy Cuts', 'Hair Design']);
 
 -- Insert services
 INSERT INTO public.services (name, description, price, duration_minutes) VALUES
