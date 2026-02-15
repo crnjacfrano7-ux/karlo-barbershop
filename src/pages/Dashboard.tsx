@@ -27,18 +27,20 @@ export default function Dashboard() {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    if (!authLoading && !roleLoading) {
-      if (!user) {
-        navigate('/login');
-        return;
-      }
-      if (!isBarber && !isAdmin) {
-        navigate('/');
-        return;
-      }
-      fetchAppointments();
-      setupRealtimeSubscription();
+    if (authLoading || roleLoading) return;
+    
+    if (!user) {
+      navigate('/login');
+      return;
     }
+    if (!isBarber && !isAdmin) {
+      console.log('Dashboard: No barber/admin role, redirecting. isBarber:', isBarber, 'isAdmin:', isAdmin);
+      navigate('/');
+      return;
+    }
+    fetchAppointments();
+    const cleanup = setupRealtimeSubscription();
+    return cleanup;
   }, [user, isBarber, isAdmin, authLoading, roleLoading, navigate]);
 
   const fetchAppointments = async () => {
