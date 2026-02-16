@@ -43,7 +43,7 @@ export function Footer() {
           <div>
             <h4 className="font-serif font-semibold mb-4">Kontakt</h4>
             <ul className="space-y-3">
-              <li className="flex items-center gap-2 text-muted-foreground text-sm">Solde 9, MeđugorjeBiskupa Čule
+              <li className="flex items-center gap-2 text-muted-foreground text-sm">Solde 9, Međugorje
                 <MapPin className="w-4 h-4 text-primary" />
                 Biskupa Čule bb, Mostar
               </li>
