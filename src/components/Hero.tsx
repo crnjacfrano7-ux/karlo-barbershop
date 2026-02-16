@@ -53,10 +53,10 @@ Dobrodošli!
           <motion.p initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.2 }}
-          className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">Mjesto gdje tradicija susreće moderni stil. Koristimo vrhunske proizvode i tehnike kako bismo osigurali vrhunski izgled
+          className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
 
-
-
+            Gdje preciznost susreće umjetnost. Doživite najfinije frizure, fade-ove i njegu 
+            u modernom industrijskom ambijentu.
           </motion.p>
 
           {/* CTA Buttons */}
@@ -94,8 +94,7 @@ Dobrodošli!
             className="flex justify-center mt-16">
 
             <div className="text-center">
-              <div className="text-3xl md:text-4xl font-bold text-primary">2+
-              </div>
+              <div className="text-3xl md:text-4xl font-bold text-primary">4+</div>
               <div className="text-sm text-muted-foreground mt-1">Godina Iskustva</div>
             </div>
           </motion.div>
@@ -103,18 +102,19 @@ Dobrodošli!
       </div>
 
       {/* Scroll indicator */}
-      <motion.div initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ delay: 1 }}
-      className="absolute bottom-8 left-1/2 -translate-x-1/2">
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ delay: 1 }}
+        className="absolute bottom-8 left-1/2 -translate-x-1/2">
 
-        
+        <motion.div
+          animate={{ y: [0, 10, 0] }}
+          transition={{ duration: 1.5, repeat: Infinity }}
+          className="w-6 h-10 rounded-full border-2 border-primary/50 flex items-start justify-center p-2">
 
-
-
-
-
-
+          <div className="w-1 h-2 bg-primary rounded-full" />
+        </motion.div>
       </motion.div>
     </section>);
 
