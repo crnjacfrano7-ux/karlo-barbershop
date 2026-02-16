@@ -110,7 +110,7 @@ export default function MyReservations() {
           <div className="flex items-center gap-2">
             <Scissors className="w-4 h-4 text-primary" />
             <span className="font-semibold">{appointment.service?.name}</span>
-            <span className="text-primary font-bold">{Number(appointment.service?.price).toFixed(2)} BAM</span>
+            <span className="text-primary font-bold">{Number(appointment.service?.price).toFixed(2)} KM</span>
           </div>
           {appointment.barber && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">

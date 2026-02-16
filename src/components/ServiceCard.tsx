@@ -34,7 +34,7 @@ export function ServiceCard({ service, selected, onSelect }: ServiceCardProps) {
           <h3 className="text-lg font-serif font-semibold">{service.name}</h3>
         </div>
         <span className="text-2xl font-bold text-primary">
-          {service.price} BAM
+          {service.price} KM
         </span>
       </div>
       

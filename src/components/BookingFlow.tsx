@@ -290,7 +290,7 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
                   <div className="flex justify-between items-center pt-2">
                     <span className="text-lg font-semibold">Ukupno</span>
                     <span className="text-3xl font-bold text-primary">
-                      {booking.service?.price} BAM
+                      {booking.service?.price} KM
                     </span>
                   </div>
                 </div>
