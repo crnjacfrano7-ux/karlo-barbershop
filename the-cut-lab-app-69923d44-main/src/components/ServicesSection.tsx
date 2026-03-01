@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import { supabase } from '@/integrations/supabase/client';
-import { Service } from '@/types/database';
 import { ServiceCard } from './ServiceCard';
+import { Service } from '@/types/database';
+import { useToast } from '@/hooks/use-toast';
 
 interface ServicesSectionProps {
   onSelectService: (service: Service) => void;
@@ -10,62 +10,57 @@ interface ServicesSectionProps {
 
 export function ServicesSection({ onSelectService }: ServicesSectionProps) {
   const [services, setServices] = useState<Service[]>([]);
+  const [loading, setLoading] = useState(true);
+  const { toast } = useToast();
 
   useEffect(() => {
-    fetchServices();
-  }, []);
+    async function fetchServices() {
+      const { data, error } = await supabase
+        .from('services')
+        .select('*')
+        .eq('is_active', true)
+        .order('price', { ascending: true });
 
-  const fetchServices = async () => {
-    const { data, error } = await supabase.
-    from('services').
-    select('*').
-    eq('is_active', true).
-    order('price');
-
-    if (!error && data) {
-      setServices(data);
+      if (error) {
+        toast({
+          title: 'Greška',
+          description: 'Nije moguće učitati usluge.',
+          variant: 'destructive',
+        });
+      } else {
+        setServices(data || []);
+      }
+      setLoading(false);
     }
-  };
+    fetchServices();
+  }, [toast]);
+
+  if (loading) return null;
 
   return (
-    <section id="services" className="py-24 relative">
+    <section id="services" className="py-24 bg-background">
       <div className="container mx-auto px-4">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="text-center mb-16">
+        <div className="text-center mb-16">
+          <h2 className="text-4xl md:text-5xl font-serif font-bold mb-4">Usluge & Cjenovnik</h2>
+          <div className="w-20 h-1 bg-primary mx-auto" />
+        </div>
 
-          <span className="text-primary text-sm font-medium uppercase tracking-wider">PONUDA
-
-          </span>
-          <h2 className="text-4xl md:text-5xl font-serif font-bold mt-3 mb-4">Usluge & Cjenovnik
-
-          </h2>
-          <p className="text-muted-foreground max-w-2xl mx-auto">
-
-
-          </p>
-        </motion.div>
-
-        <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
-          {services.map((service, index) =>
-          <motion.div
-            key={service.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}>
-
+        {/* KLJUČNI DIO ZA CENTRIRANJE */}
+        <div className="flex flex-wrap justify-center gap-6 max-w-5xl mx-auto">
+          {services.map((service) => (
+            <div 
+              key={service.id} 
+              className="w-full md:w-[calc(50%-1.5rem)] lg:max-w-[450px]"
+            >
               <ServiceCard
-              service={service}
-              selected={false}
-              onSelect={() => onSelectService(service)} />
-
-            </motion.div>
-          )}
+                service={service}
+                selected={false}
+                onSelect={() => onSelectService(service)}
+              />
+            </div>
+          ))}
         </div>
       </div>
-    </section>);
-
+    </section>
+  );
 }

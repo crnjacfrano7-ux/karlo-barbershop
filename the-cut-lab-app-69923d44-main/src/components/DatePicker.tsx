@@ -1,7 +1,20 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
-import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, isToday, isBefore, startOfToday, isSunday } from 'date-fns';
+import {
+  format,
+  addMonths,
+  subMonths,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isSameMonth,
+  isSameDay,
+  isToday,
+  isBefore,
+  startOfToday,
+  isSunday,
+} from 'date-fns';
 import { hr } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
 import { Button } from './ui/button';
@@ -9,9 +22,32 @@ import { Button } from './ui/button';
 interface DatePickerProps {
   selected: Date | null;
   onSelect: (date: Date) => void;
+  /**
+   * Additional dates that should be disabled (e.g. blackout dates).
+   */
+  disabledDates?: Date[];
+  /**
+   * Dates that should be visually highlighted (e.g. existing blackout dates in admin view).
+   */
+  highlightedDates?: Date[];
+  /**
+   * Whether dates in the past should be disabled. Defaults to true.
+   */
+  disablePast?: boolean;
+  /**
+   * Whether Sundays should be disabled. Defaults to true.
+   */
+  disableSundays?: boolean;
 }
 
-export function DatePicker({ selected, onSelect }: DatePickerProps) {
+export function DatePicker({
+  selected,
+  onSelect,
+  disabledDates = [],
+  highlightedDates = [],
+  disablePast = true,
+  disableSundays = true,
+}: DatePickerProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const today = startOfToday();
 
@@ -68,7 +104,12 @@ export function DatePicker({ selected, onSelect }: DatePickerProps) {
           const isCurrentMonth = isSameMonth(day, currentMonth);
           const isDayToday = isToday(day);
           const isSundayDay = isSunday(day);
-          const isDisabled = isPast || isSundayDay;
+          const isDisabledByCustom = disabledDates.some(d => isSameDay(d, day));
+          const isHighlighted = highlightedDates.some(d => isSameDay(d, day));
+          const isDisabled =
+            (disablePast && isPast) ||
+            (disableSundays && isSundayDay) ||
+            isDisabledByCustom;
 
           return (
             <motion.button
@@ -84,6 +125,7 @@ export function DatePicker({ selected, onSelect }: DatePickerProps) {
                 isSundayDay && !isPast && 'text-red-400',
                 !isCurrentMonth && 'text-muted-foreground',
                 isDayToday && !isSelected && 'border border-primary/50',
+                isHighlighted && 'border border-destructive/60 bg-destructive/5',
                 isSelected && 'bg-primary text-primary-foreground shadow-gold'
               )}
             >

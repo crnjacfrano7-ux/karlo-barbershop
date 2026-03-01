@@ -15,8 +15,9 @@ export function ServiceCard({ service, selected, onSelect }: ServiceCardProps) {
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
       onClick={onSelect}
+      /* mx-auto osigurava da je kartica u sredini svog stupca, a max-w-md sprečava da postane preširoka */
       className={cn(
-        'service-card group',
+        'service-card group w-full h-full relative mx-auto max-w-md flex flex-col',
         selected && 'selected'
       )}
     >
@@ -31,22 +32,28 @@ export function ServiceCard({ service, selected, onSelect }: ServiceCardProps) {
               selected ? 'text-primary' : 'text-muted-foreground'
             )} />
           </div>
-          <h3 className="text-lg font-serif font-semibold">{service.name}</h3>
+          <h3
+            className="text-lg font-serif font-semibold line-clamp-2 min-h-[3.5rem] flex items-center">
+            {service.name}
+          </h3>
         </div>
-        <span className="text-2xl font-bold text-primary">
-          {service.price} KM
+        <span className="text-2xl font-bold text-primary shrink-0 ml-2">
+          {Number(service.price).toFixed(2)} KM
         </span>
       </div>
       
       {service.description && (
-        <p className="text-muted-foreground text-sm mb-4">
+        <p className="text-muted-foreground text-sm mb-4 line-clamp-2 flex-grow">
           {service.description}
         </p>
       )}
       
-      <div className="flex items-center gap-2 text-sm text-muted-foreground">
+      {/* Spacer koji gura donji dio kartice (sat) uvijek na dno */}
+      {!service.description && <div className="flex-grow" />}
+
+      <div className="flex items-center gap-2 text-sm text-muted-foreground mt-auto">
         <Clock className="w-4 h-4" />
-        <span>30 minuta</span>
+        <span>{service.duration_minutes} minuta</span>
       </div>
 
       {selected && (
@@ -55,7 +62,7 @@ export function ServiceCard({ service, selected, onSelect }: ServiceCardProps) {
           animate={{ scale: 1 }}
           className="absolute top-4 right-4"
         >
-          <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center">
+          <div className="w-6 h-6 rounded-full bg-primary flex items-center justify-center shadow-lg">
             <svg className="w-4 h-4 text-primary-foreground" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
             </svg>

@@ -34,7 +34,7 @@ export function Hero({ onBookNow }: HeroProps) {
             className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8">
 
             <Star className="w-4 h-4 text-primary fill-primary" />
-            <span className="text-sm font-medium text-primary">Premium Frizerski Salon</span>
+            <span className="text-sm font-medium text-primary">Premium Barber Shop</span>
           </motion.div>
 
           {/* Main heading */}
@@ -44,7 +44,7 @@ export function Hero({ onBookNow }: HeroProps) {
             transition={{ duration: 0.6, delay: 0.1 }}
             className="text-5xl md:text-7xl font-serif font-bold mb-6 text-shadow">
 
-Dobrodošli!
+
             <span className="block text-gradient">Dobrodošli!
             </span>
           </motion.h1>
@@ -55,8 +55,8 @@ Dobrodošli!
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-lg md:text-xl text-muted-foreground mb-10 max-w-2xl mx-auto">
 
-            Gdje preciznost susreće umjetnost. Doživite najfinije frizure, fade-ove i njegu 
-            u modernom industrijskom ambijentu.
+           Mestar Barbershop mjesto gdje tradicija susreće moderni stil.
+           Koristimo vrhunske proizvode i tehnike kako bismo osigurali savršen izgled
           </motion.p>
 
           {/* CTA Buttons */}
@@ -101,21 +101,7 @@ Dobrodošli!
         </div>
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 1 }}
-        className="absolute bottom-8 left-1/2 -translate-x-1/2">
-
-        <motion.div
-          animate={{ y: [0, 10, 0] }}
-          transition={{ duration: 1.5, repeat: Infinity }}
-          className="w-6 h-10 rounded-full border-2 border-primary/50 flex items-start justify-center p-2">
-
-          <div className="w-1 h-2 bg-primary rounded-full" />
-        </motion.div>
-      </motion.div>
+    
     </section>);
 
 }

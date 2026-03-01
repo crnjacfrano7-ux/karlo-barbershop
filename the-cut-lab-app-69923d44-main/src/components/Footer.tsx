@@ -45,11 +45,11 @@ export function Footer() {
             <ul className="space-y-3">
               <li className="flex items-center gap-2 text-muted-foreground text-sm">Solde 9, Međugorje
                 <MapPin className="w-4 h-4 text-primary" />
-                Biskupa Čule bb, Mostar
+              
               </li>
               <li className="flex items-center gap-2 text-muted-foreground text-sm">063 878-211
                 <Phone className="w-4 h-4 text-primary" />
-                063 629-436
+    
               </li>
             </ul>
           </div>

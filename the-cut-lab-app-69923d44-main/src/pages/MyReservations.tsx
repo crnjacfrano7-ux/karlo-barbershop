@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
-import { format, isPast, isToday, parseISO } from 'date-fns';
+import { format, isPast, isToday, parseISO, addMinutes } from 'date-fns';
 import { hr } from 'date-fns/locale';
 import { Calendar, Clock, Scissors, ChevronLeft, User } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
@@ -57,17 +57,30 @@ export default function MyReservations() {
   };
 
   const now = new Date();
-  const todayStr = format(now, 'yyyy-MM-dd');
 
-  const upcoming = appointments.filter(a => {
-    if (a.status === 'cancelled') return false;
-    return a.appointment_date > todayStr || (a.appointment_date === todayStr && a.appointment_time >= format(now, 'HH:mm:ss'));
-  });
+  const getAppointmentDateTime = (a: Appointment) => {
+    try {
+      return parseISO(`${a.appointment_date}T${a.appointment_time}`);
+    } catch {
+      return new Date(0);
+    }
+  };
 
-  const past = appointments.filter(a => {
-    if (a.status === 'cancelled') return false;
-    return a.appointment_date < todayStr || (a.appointment_date === todayStr && a.appointment_time < format(now, 'HH:mm:ss'));
-  });
+  const isFinished = (a: Appointment) => {
+    const start = getAppointmentDateTime(a);
+    return now >= addMinutes(start, 30);
+  };
+
+  const upcoming = appointments.filter(a => a.status !== 'cancelled' && !isFinished(a));
+  const past = appointments
+    .filter(a => a.status !== 'cancelled' && isFinished(a))
+    .slice()
+    .sort((a, b) => {
+      if (a.appointment_date === b.appointment_date) {
+        return b.appointment_time.localeCompare(a.appointment_time);
+      }
+      return b.appointment_date.localeCompare(a.appointment_date);
+    });
 
   const cancelled = appointments.filter(a => a.status === 'cancelled');
 

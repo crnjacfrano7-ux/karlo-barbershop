@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { ArrowLeft, ArrowRight, Check, Calendar, User, Scissors } from 'lucide-react';
-import { format, isSaturday } from 'date-fns';
+import { format, isSaturday, parseISO } from 'date-fns';
 import { hr } from 'date-fns/locale';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
@@ -39,10 +39,12 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
   const [barbers, setBarbers] = useState<Barber[]>([]);
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [blackoutDates, setBlackoutDates] = useState<Date[]>([]);
 
   useEffect(() => {
     fetchServices();
     fetchBarbers();
+    fetchBlackoutDates();
   }, []);
 
   useEffect(() => {
@@ -71,6 +73,20 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
 
     if (!error && data) {
       setBarbers(data);
+    }
+  };
+
+  const fetchBlackoutDates = async () => {
+    const { data, error } = await supabase
+      .from('blackout_dates')
+      .select('date');
+
+    if (!error && data) {
+      setBlackoutDates(
+        data
+          .filter((d): d is { date: string } => !!d && typeof d.date === 'string')
+          .map(d => parseISO(d.date))
+      );
     }
   };
 
@@ -112,6 +128,14 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
 
     setLoading(true);
     try {
+      const metadata = (user.user_metadata || {}) as { [key: string]: any };
+      const metaName = metadata.full_name || metadata.name || null;
+      const emailName =
+        user.email && typeof user.email === 'string' && user.email.includes('@')
+          ? user.email.split('@')[0]
+          : null;
+      const customerName = metaName || emailName || 'Klijent';
+
       const { error } = await supabase.from('appointments').insert({
         user_id: user.id,
         service_id: booking.service.id,
@@ -119,6 +143,7 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
         appointment_date: format(booking.date, 'yyyy-MM-dd'),
         appointment_time: booking.time,
         status: 'confirmed',
+        customer_name: customerName,
       });
 
       if (error) throw error;
@@ -247,6 +272,8 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
                 <DatePicker
                   selected={booking.date}
                   onSelect={(date) => setBooking(prev => ({ ...prev, date, time: null }))}
+                  disabledDates={blackoutDates}
+                  highlightedDates={blackoutDates}
                 />
                 {booking.date && (
                   <TimeSlotPicker

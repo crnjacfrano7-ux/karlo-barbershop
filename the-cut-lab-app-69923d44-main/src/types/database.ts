@@ -29,6 +29,8 @@ export interface Appointment {
   notes: string | null;
   created_at: string;
   updated_at: string;
+   customer_name?: string | null;
+   display_name?: string | null;
   // Joined data
   barber?: Barber;
   service?: Service;
@@ -36,6 +38,14 @@ export interface Appointment {
     full_name: string | null;
     phone: string | null;
   };
+}
+
+export interface BlackoutDate {
+  id: string;
+  date: string;
+  reason: string | null;
+  created_by: string | null;
+  created_at: string;
 }
 
 export interface Profile {

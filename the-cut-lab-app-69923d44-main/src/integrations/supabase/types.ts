@@ -22,10 +22,11 @@ export type Database = {
           created_at: string
           id: string
           notes: string | null
+          customer_name: string | null
           service_id: string
           status: string
           updated_at: string
-          user_id: string
+          user_id: string | null
         }
         Insert: {
           appointment_date: string
@@ -34,10 +35,11 @@ export type Database = {
           created_at?: string
           id?: string
           notes?: string | null
+          customer_name?: string | null
           service_id: string
           status?: string
           updated_at?: string
-          user_id: string
+          user_id?: string | null
         }
         Update: {
           appointment_date?: string
@@ -46,10 +48,11 @@ export type Database = {
           created_at?: string
           id?: string
           notes?: string | null
+          customer_name?: string | null
           service_id?: string
           status?: string
           updated_at?: string
-          user_id?: string
+          user_id?: string | null
         }
         Relationships: [
           {
@@ -67,6 +70,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      blackout_dates: {
+        Row: {
+          id: string
+          date: string
+          reason: string | null
+          created_by: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          date: string
+          reason?: string | null
+          created_by?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          date?: string
+          reason?: string | null
+          created_by?: string | null
+          created_at?: string
+        }
+        Relationships: []
       }
       barbers: {
         Row: {

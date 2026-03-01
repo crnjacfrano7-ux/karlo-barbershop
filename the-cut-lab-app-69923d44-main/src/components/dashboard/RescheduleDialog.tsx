@@ -17,9 +17,17 @@ interface RescheduleDialogProps {
   appointment: Appointment | null;
   barbers: Barber[];
   onSuccess: () => void;
+  blackoutDates?: Date[];
 }
 
-export function RescheduleDialog({ open, onOpenChange, appointment, barbers, onSuccess }: RescheduleDialogProps) {
+export function RescheduleDialog({
+  open,
+  onOpenChange,
+  appointment,
+  barbers,
+  onSuccess,
+  blackoutDates = [],
+}: RescheduleDialogProps) {
   const { toast } = useToast();
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
@@ -70,7 +78,6 @@ export function RescheduleDialog({ open, onOpenChange, appointment, barbers, onS
       onSuccess();
       onOpenChange(false);
     } catch (error) {
-      console.error(error);
       toast({ title: 'Greška', description: 'Nije moguće premjestiti termin.', variant: 'destructive' });
     } finally {
       setLoading(false);
@@ -86,16 +93,20 @@ export function RescheduleDialog({ open, onOpenChange, appointment, barbers, onS
         {appointment && (
           <div className="space-y-4 mt-4">
             <p className="text-sm text-muted-foreground">
-              Premještanje termina za <strong>{appointment.profile?.full_name || 'Gost'}</strong> — {appointment.service?.name}
+              Premještanje termina za <strong>{appointment.customer_name || appointment.profile?.full_name || 'Gost'}</strong> — {appointment.service?.name}
             </p>
             <div>
               <Label>Frizer</Label>
               <Select value={selectedBarber} onValueChange={setSelectedBarber}>
                 <SelectTrigger><SelectValue /></SelectTrigger>
                 <SelectContent>
-                  {barbers.map(b => (
-                    <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
-                  ))}
+                  {barbers
+                    .filter(b => b.id && b.id !== '')
+                    .map(b => (
+                      <SelectItem key={b.id} value={String(b.id)}>
+                        {b.name}
+                      </SelectItem>
+                    ))}
                 </SelectContent>
               </Select>
             </div>
@@ -104,6 +115,8 @@ export function RescheduleDialog({ open, onOpenChange, appointment, barbers, onS
               <DatePicker
                 selected={selectedDate}
                 onSelect={(date) => { setSelectedDate(date); setSelectedTime(null); }}
+                disabledDates={blackoutDates}
+                highlightedDates={blackoutDates}
               />
             </div>
             {selectedDate && (

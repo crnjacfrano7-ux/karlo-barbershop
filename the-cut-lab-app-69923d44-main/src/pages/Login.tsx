@@ -54,7 +54,7 @@ export default function Login() {
         {/* Logo */}
         <Link to="/" className="flex items-center justify-center gap-2 mb-8">
           <Scissors className="w-10 h-10 text-primary" />
-          <span className="font-serif text-2xl font-bold">The Cut Lab</span>
+          <span className="font-serif text-2xl font-bold">meštar barbershop</span>
         </Link>
 
         <div className="glass-card p-8">
@@ -130,6 +130,8 @@ export default function Login() {
           </Link>
         </p>
       </motion.div>
+    
     </div>
+
   );
 }

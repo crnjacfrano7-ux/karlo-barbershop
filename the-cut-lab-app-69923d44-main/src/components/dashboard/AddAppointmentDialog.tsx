@@ -20,9 +20,19 @@ interface AddAppointmentDialogProps {
   services: Service[];
   barbers: Barber[];
   onSuccess: () => void;
+  isAdmin?: boolean;
+  blackoutDates?: Date[];
 }
 
-export function AddAppointmentDialog({ open, onOpenChange, services, barbers, onSuccess }: AddAppointmentDialogProps) {
+export function AddAppointmentDialog({
+  open,
+  onOpenChange,
+  services,
+  barbers,
+  onSuccess,
+  isAdmin = false,
+  blackoutDates = [],
+}: AddAppointmentDialogProps) {
   const { toast } = useToast();
   const [selectedService, setSelectedService] = useState<string>('');
   const [selectedBarber, setSelectedBarber] = useState<string>('');
@@ -31,6 +41,33 @@ export function AddAppointmentDialog({ open, onOpenChange, services, barbers, on
   const [customerName, setCustomerName] = useState('');
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [currentUserName, setCurrentUserName] = useState<string>('Klijent');
+
+  useEffect(() => {
+    if (open) {
+      fetchCurrentUserName();
+    }
+  }, [open]);
+
+  const fetchCurrentUserName = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data } = await supabase
+          .from('profiles')
+          .select('full_name')
+          .eq('user_id', user.id)
+          .single();
+        if (data?.full_name) {
+          setCurrentUserName(data.full_name);
+        }
+      }
+    } catch (error) {
+      setCurrentUserName('Klijent');
+    }
+  };
+
+  // Removed customer list fetching - admins can no longer create reservations for other accounts
 
   useEffect(() => {
     if (selectedBarber && selectedDate) {
@@ -53,27 +90,53 @@ export function AddAppointmentDialog({ open, onOpenChange, services, barbers, on
     if (!selectedService || !selectedBarber || !selectedDate || !selectedTime) return;
     setLoading(true);
     try {
-      // Create a walk-in appointment using the barber's own user_id
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) throw new Error('Not authenticated');
 
+      // Extract the IDs specifically to avoid sending [object Object]
+      const serviceId = typeof selectedService === 'object' ? (selectedService as any).id : selectedService;
+      const barberId = typeof selectedBarber === 'object' ? (selectedBarber as any).id : selectedBarber;
+
+      // Validate IDs are strings
+      if (!serviceId || typeof serviceId !== 'string') {
+        throw new Error('Invalid service selected');
+      }
+      if (!barberId || typeof barberId !== 'string') {
+        throw new Error('Invalid barber selected');
+      }
+
+      // Determine customer name (optional walk-in name)
+      let nameToUse = customerName || 'Klijent';
+
+      console.log('Submitting appointment with:', {
+        user_id: user.id,
+        service_id: serviceId,
+        barber_id: barberId,
+        customer_name: nameToUse,
+        appointment_date: format(selectedDate, 'yyyy-MM-dd'),
+        appointment_time: selectedTime,
+      });
+
       const { error } = await supabase.from('appointments').insert({
         user_id: user.id,
-        service_id: selectedService,
-        barber_id: selectedBarber,
+        service_id: serviceId,
+        barber_id: barberId,
         appointment_date: format(selectedDate, 'yyyy-MM-dd'),
         appointment_time: selectedTime,
         status: 'confirmed',
-        notes: customerName ? `Walk-in: ${customerName}` : 'Walk-in termin',
+        customer_name: nameToUse,
+        notes: null,
       });
+
       if (error) throw error;
       toast({ title: 'Termin dodan', description: 'Novi termin je uspješno kreiran.' });
       onSuccess();
       onOpenChange(false);
       resetForm();
     } catch (error) {
-      console.error(error);
-      toast({ title: 'Greška', description: 'Nije moguće dodati termin.', variant: 'destructive' });
+      const errorMsg = error instanceof Error ? error.message : 'Nije moguće dodati termin.';
+      console.error('Error submitting appointment:', errorMsg);
+      toast({ title: 'Greška', description: errorMsg, variant: 'destructive' });
     } finally {
       setLoading(false);
     }
@@ -95,51 +158,71 @@ export function AddAppointmentDialog({ open, onOpenChange, services, barbers, on
         </DialogHeader>
         <div className="space-y-4 mt-4">
           <div>
-            <Label>Ime Klijenta (opcionalno)</Label>
+            <p className="text-sm">Kreiraj termin kao: <strong>{currentUserName}</strong></p>
+          </div>
+          <div>
+            <Label id="customer-name-label" htmlFor="customer-name">Ime Klijenta (opcionalno - koristi za prosljeđivanje)</Label>
             <Input
-              placeholder="Walk-in klijent"
+              id="customer-name"
+              placeholder={currentUserName}
               value={customerName}
               onChange={e => setCustomerName(e.target.value)}
+              disabled={false}
             />
+            <p className="text-xs text-muted-foreground mt-1">Ostavite prazno za korištenje imena iz vašeg računa</p>
           </div>
           <div>
-            <Label>Usluga</Label>
+            <Label id="service-label" htmlFor="service-select">Usluga</Label>
             <Select value={selectedService} onValueChange={setSelectedService}>
-              <SelectTrigger><SelectValue placeholder="Odaberi uslugu" /></SelectTrigger>
+              <SelectTrigger id="service-select" aria-labelledby="service-label"><SelectValue placeholder="Odaberi uslugu" /></SelectTrigger>
               <SelectContent>
-                {services.map(s => (
-                  <SelectItem key={s.id} value={s.id}>{s.name} - {s.price} KM</SelectItem>
-                ))}
+                {services
+                  .filter(s => s.id && s.id !== '')
+                  .map(s => (
+                    <SelectItem key={s.id} value={String(s.id)}>
+                      {s.name} - {s.price} KM
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>
           <div>
-            <Label>Frizer</Label>
+            <Label id="barber-label" htmlFor="barber-select">Frizer</Label>
             <Select value={selectedBarber} onValueChange={setSelectedBarber}>
-              <SelectTrigger><SelectValue placeholder="Odaberi frizera" /></SelectTrigger>
+              <SelectTrigger id="barber-select" aria-labelledby="barber-label"><SelectValue placeholder="Odaberi frizera" /></SelectTrigger>
               <SelectContent>
-                {barbers.map(b => (
-                  <SelectItem key={b.id} value={b.id}>{b.name}</SelectItem>
-                ))}
+                {barbers
+                  .filter(b => b.id && b.id !== '')
+                  .map(b => (
+                    <SelectItem key={b.id} value={String(b.id)}>
+                      {b.name}
+                    </SelectItem>
+                  ))}
               </SelectContent>
             </Select>
           </div>
           <div>
-            <Label>Datum</Label>
-            <DatePicker
-              selected={selectedDate}
-              onSelect={(date) => { setSelectedDate(date); setSelectedTime(null); }}
-            />
+            <Label id="date-label" htmlFor="date-picker">Datum</Label>
+            <div id="date-picker" aria-labelledby="date-label">
+              <DatePicker
+                selected={selectedDate}
+                onSelect={(date) => { setSelectedDate(date); setSelectedTime(null); }}
+                disabledDates={blackoutDates}
+                highlightedDates={blackoutDates}
+              />
+            </div>
           </div>
           {selectedDate && (
             <div>
-              <Label>Vrijeme</Label>
-              <TimeSlotPicker
-                selectedTime={selectedTime}
-                onSelect={setSelectedTime}
-                bookedSlots={bookedSlots}
-                isSaturday={isSaturday(selectedDate)}
-              />
+              <Label id="time-label" htmlFor="time-picker">Vrijeme</Label>
+              <div id="time-picker" aria-labelledby="time-label">
+                <TimeSlotPicker
+                  selectedTime={selectedTime}
+                  onSelect={setSelectedTime}
+                  bookedSlots={bookedSlots}
+                  isSaturday={isSaturday(selectedDate)}
+                />
+              </div>
             </div>
           )}
           <Button
