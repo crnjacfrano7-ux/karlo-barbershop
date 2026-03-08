@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Ban } from 'lucide-react';
 import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, isToday, isBefore, startOfToday, isSunday } from 'date-fns';
 import { hr } from 'date-fns/locale';
 import { cn } from '@/lib/utils';
@@ -9,9 +9,10 @@ import { Button } from './ui/button';
 interface DatePickerProps {
   selected: Date | null;
   onSelect: (date: Date) => void;
+  blockedDates?: string[];
 }
 
-export function DatePicker({ selected, onSelect }: DatePickerProps) {
+export function DatePicker({ selected, onSelect, blockedDates = [] }: DatePickerProps) {
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const today = startOfToday();
 
@@ -24,6 +25,11 @@ export function DatePicker({ selected, onSelect }: DatePickerProps) {
   const paddingDays = Array.from({ length: startDay }, (_, i) => i);
 
   const weekDays = ['Ned', 'Pon', 'Uto', 'Sri', 'Čet', 'Pet', 'Sub'];
+
+  const isDateBlocked = (date: Date): boolean => {
+    const dateStr = format(date, 'yyyy-MM-dd');
+    return blockedDates.includes(dateStr);
+  };
 
   return (
     <div className="glass-card p-6">
@@ -68,7 +74,8 @@ export function DatePicker({ selected, onSelect }: DatePickerProps) {
           const isCurrentMonth = isSameMonth(day, currentMonth);
           const isDayToday = isToday(day);
           const isSundayDay = isSunday(day);
-          const isDisabled = isPast || isSundayDay;
+          const isBlocked = isDateBlocked(day);
+          const isDisabled = isPast || isSundayDay || isBlocked;
 
           return (
             <motion.button
@@ -78,24 +85,35 @@ export function DatePicker({ selected, onSelect }: DatePickerProps) {
               onClick={() => !isDisabled && onSelect(day)}
               disabled={isDisabled}
               className={cn(
-                'p-2 rounded-lg text-center transition-all duration-200',
+                'p-2 rounded-lg text-center transition-all duration-200 relative',
                 'hover:bg-secondary',
                 isDisabled && 'opacity-30 cursor-not-allowed',
                 isSundayDay && !isPast && 'text-red-400',
+                isBlocked && 'text-red-500',
                 !isCurrentMonth && 'text-muted-foreground',
                 isDayToday && !isSelected && 'border border-primary/50',
                 isSelected && 'bg-primary text-primary-foreground shadow-gold'
               )}
+              title={isBlocked ? 'Blokiran datum' : undefined}
             >
               {format(day, 'd')}
+              {isBlocked && (
+                <Ban className="w-3 h-3 absolute top-0 right-0 text-red-500" />
+              )}
             </motion.button>
           );
         })}
       </div>
       
-      <p className="text-xs text-muted-foreground mt-4 text-center">
-        Nedjelja - zatvoreno
-      </p>
+      <div className="flex flex-col gap-2 mt-4 text-xs text-muted-foreground text-center">
+        <p>Nedjelja - zatvoreno</p>
+        {blockedDates.length > 0 && (
+          <p className="text-red-400 flex items-center justify-center gap-1">
+            <Ban className="w-3 h-3" /> - Blokirani datumi
+          </p>
+        )}
+      </div>
     </div>
   );
 }
+

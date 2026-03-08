@@ -27,8 +27,12 @@ export function ServicesSection({ onSelectService }: ServicesSectionProps) {
     }
   };
 
+  // Calculate the number of columns to center odd items
+  const serviceCount = services.length;
+  const isOdd = serviceCount % 2 !== 0;
+
   return (
-    <section id="services" className="py-24 relative">
+    <section id="services" className="py-16 relative">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -48,24 +52,27 @@ export function ServicesSection({ onSelectService }: ServicesSectionProps) {
           </p>
         </motion.div>
 
+        {/* Centered grid that handles odd number of items */}
         <div className="grid gap-6 md:grid-cols-2 max-w-4xl mx-auto">
-          {services.map((service, index) =>
-          <motion.div
-            key={service.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}>
-
+          {services.map((service, index) => (
+            <motion.div
+              key={service.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              className={index === serviceCount - 1 && isOdd ? 'md:col-span-2 md:max-w-md mx-auto w-full' : ''}
+            >
               <ServiceCard
               service={service}
               selected={false}
               onSelect={() => onSelectService(service)} />
 
             </motion.div>
-          )}
+          ))}
         </div>
       </div>
     </section>);
 
 }
+

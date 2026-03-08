@@ -61,3 +61,20 @@ export interface BookingState {
   date: Date | null;
   time: string | null;
 }
+
+export interface BlockedDate {
+  id: string;
+  blocked_date: string;
+  reason: string | null;
+  created_at: string;
+  created_by: string | null;
+}
+
+export interface BlockedHour {
+  id: string;
+  blocked_date: string;
+  blocked_time: string;
+  reason: string | null;
+  created_at: string;
+  created_by: string | null;
+}

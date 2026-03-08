@@ -21,8 +21,12 @@ export function BarbersSection() {
     }
   };
 
+  // Calculate centering for odd number of barbers
+  const barberCount = barbers.length;
+  const isOdd = barberCount % 2 !== 0;
+
   return (
-    <section id="barbers" className="py-24 bg-gradient-section">
+    <section id="barbers" className="py-16 bg-gradient-section dark:bg-dark-gradient-section">
       <div className="container mx-auto px-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -41,16 +45,17 @@ export function BarbersSection() {
           </p>
         </motion.div>
 
+        {/* Centered grid that handles odd number of items */}
         <div className="grid gap-8 md:grid-cols-3 max-w-5xl mx-auto">
-          {barbers.map((barber, index) =>
-          <motion.div
-            key={barber.id}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ delay: index * 0.1 }}
-            className="glass-card p-6 text-center group">
-
+          {barbers.map((barber, index) => (
+            <motion.div
+              key={barber.id}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: index * 0.1 }}
+              className={`glass-card p-6 text-center group ${index === barberCount - 1 && isOdd ? 'md:col-start-2' : ''}`}
+            >
               <div className="relative mb-6 inline-block">
                 <div className="w-32 h-32 rounded-full overflow-hidden border-2 border-primary/20 group-hover:border-primary transition-colors mx-auto">
                   <img
@@ -80,9 +85,10 @@ export function BarbersSection() {
                 </div>
             }
             </motion.div>
-          )}
+          ))}
         </div>
       </div>
     </section>);
 
 }
+

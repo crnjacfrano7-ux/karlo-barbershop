@@ -31,7 +31,7 @@ export function Header() {
           {/* Logo */}
           <Link to="/" className="flex items-center gap-2">
             <img src="/favicon.png" alt="Meštar Barber Shop" className="w-10 h-10 object-contain" />
-            <span className="font-serif text-xl font-bold">Meštar Barber Shop</span>
+            <span className="font-serif text-xl font-bold">Karlo Barbershop</span>
           </Link>
 
           {/* Desktop Nav */}

@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { format, isSaturday } from 'date-fns';
 import { hr } from 'date-fns/locale';
 import { Plus, X } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
 import { useToast } from '@/hooks/use-toast';
-import { Service, Barber } from '@/types/database';
+import { Service, Barber, BlockedDate } from '@/types/database';
 import { Button } from '@/components/ui/button';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
@@ -12,7 +12,6 @@ import { DatePicker } from '@/components/DatePicker';
 import { TimeSlotPicker } from '@/components/TimeSlotPicker';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { useEffect } from 'react';
 
 interface AddAppointmentDialogProps {
   open: boolean;
@@ -30,13 +29,25 @@ export function AddAppointmentDialog({ open, onOpenChange, services, barbers, on
   const [selectedTime, setSelectedTime] = useState<string | null>(null);
   const [customerName, setCustomerName] = useState('');
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+  const [blockedDates, setBlockedDates] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    fetchBlockedDates();
+  }, []);
 
   useEffect(() => {
     if (selectedBarber && selectedDate) {
       fetchBookedSlots();
     }
   }, [selectedBarber, selectedDate]);
+
+  const fetchBlockedDates = async () => {
+    const { data } = await supabase.from('blocked_dates').select('blocked_date');
+    if (data) {
+      setBlockedDates(data.map(d => d.blocked_date));
+    }
+  };
 
   const fetchBookedSlots = async () => {
     if (!selectedBarber || !selectedDate) return;
@@ -129,6 +140,7 @@ export function AddAppointmentDialog({ open, onOpenChange, services, barbers, on
             <DatePicker
               selected={selectedDate}
               onSelect={(date) => { setSelectedDate(date); setSelectedTime(null); }}
+              blockedDates={blockedDates}
             />
           </div>
           {selectedDate && (
@@ -155,3 +167,4 @@ export function AddAppointmentDialog({ open, onOpenChange, services, barbers, on
     </Dialog>
   );
 }
+

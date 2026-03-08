@@ -54,7 +54,7 @@ const Index = () => {
             ref={bookingRef}
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
-            className="py-24 bg-card relative"
+            className="py-24 bg-card dark:bg-dark-gradient-section relative"
           >
             <Button
               variant="ghost"
