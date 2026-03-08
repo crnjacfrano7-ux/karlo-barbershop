@@ -9,7 +9,7 @@ export function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
-<img src="/logo.png" alt="Meštar Barber Shop" className="w-10 h-10 object-contain" />
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="w-8 h-8 text-primary"><circle cx="6" cy="6" r="3"></circle><path d="M8.12 8.12 12 12"></path><path d="M20 4 8.12 15.88"></path><circle cx="6" cy="18" r="3"></circle><path d="M14.8 14.8 20 20"></path></svg>
               <span className="font-serif text-xl font-bold">Karlo Barbershop</span>
             </Link>
             <p className="text-muted-foreground text-sm">
@@ -58,7 +58,7 @@ export function Footer() {
             <ul className="space-y-2">
               <li className="flex items-center gap-2 text-muted-foreground text-sm">
                 <Clock className="w-4 h-4 text-primary" />
-                <span>Pon - Sub: 8:00 - 16:30</span>
+                <span>Pon - Sub: 8:00 - 19:00</span>
               </li>
               
               <li className="text-muted-foreground text-sm pl-6">
@@ -69,6 +69,7 @@ export function Footer() {
         </div>
 
         <div className="border-t border-border mt-12 pt-8 text-center text-sm text-muted-foreground">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="w-8 h-8 text-primary mx-auto mb-2"><circle cx="6" cy="6" r="3"></circle><path d="M8.12 8.12 12 12"></path><path d="M20 4 8.12 15.88"></path><circle cx="6" cy="18" r="3"></circle><path d="M14.8 14.8 20 20"></path></svg>
           <p>&copy; {new Date().getFullYear()} Karlo Barbershop. Sva prava pridržana.</p>
         </div>
       </div>

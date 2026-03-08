@@ -16,14 +16,35 @@ export default function MyReservations() {
   const { user, loading: authLoading } = useAuth();
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [loading, setLoading] = useState(true);
+  const [userName, setUserName] = useState<string>('');
 
   useEffect(() => {
     if (!authLoading && !user) {
       navigate('/login');
       return;
     }
-    if (user) fetchAppointments();
+    if (user) {
+      fetchUserProfile();
+      fetchAppointments();
+    }
   }, [user, authLoading, navigate]);
+
+  const fetchUserProfile = async () => {
+    if (!user) return;
+    try {
+      const { data, error } = await supabase
+        .from('profiles')
+        .select('full_name')
+        .eq('id', user.id)
+        .single();
+      
+      if (data?.full_name) {
+        setUserName(data.full_name);
+      }
+    } catch (error) {
+      console.error('Error fetching user profile:', error);
+    }
+  };
 
   const fetchAppointments = async () => {
     setLoading(true);
@@ -160,11 +181,11 @@ export default function MyReservations() {
           <div className="flex items-center justify-between h-16">
             <div className="flex items-center gap-4">
               <Link to="/" className="flex items-center gap-2">
-<img src="/logo.png" alt="Meštar" className="w-8 h-8 object-contain" />
-                <span className="font-serif text-xl font-bold">Meštar</span>
+                <Scissors className="w-8 h-8 text-primary" />
+                <span className="font-serif text-xl font-bold">Karlo Barbershop</span>
               </Link>
               <span className="text-muted-foreground">|</span>
-              <span className="text-sm font-medium">Moje Rezervacije</span>
+              <span className="text-sm font-medium">{userName || 'Moje Rezervacije'}</span>
             </div>
             <Button variant="ghost" size="sm" onClick={() => navigate('/')}>
               <ChevronLeft className="w-4 h-4 mr-1" />

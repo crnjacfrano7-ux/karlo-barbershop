@@ -31,6 +31,31 @@ export function AddAppointmentDialog({ open, onOpenChange, services, barbers, on
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
   const [blockedDates, setBlockedDates] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
+  const [currentUserName, setCurrentUserName] = useState<string>('Klijent');
+
+  useEffect(() => {
+    if (open) {
+      fetchCurrentUserName();
+    }
+  }, [open]);
+
+  const fetchCurrentUserName = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (user) {
+        const { data } = await supabase
+          .from('profiles')
+          .select('full_name')
+          .eq('user_id', user.id)
+          .single();
+        if (data?.full_name) {
+          setCurrentUserName(data.full_name);
+        }
+      }
+    } catch (error) {
+      setCurrentUserName('Klijent');
+    }
+  };
 
   useEffect(() => {
     fetchBlockedDates();
@@ -108,7 +133,7 @@ export function AddAppointmentDialog({ open, onOpenChange, services, barbers, on
           <div>
             <Label>Ime Klijenta (opcionalno)</Label>
             <Input
-              placeholder="Walk-in klijent"
+              placeholder={currentUserName}
               value={customerName}
               onChange={e => setCustomerName(e.target.value)}
             />

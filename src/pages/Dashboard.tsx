@@ -412,7 +412,7 @@ export default function Dashboard() {
             <div className="flex items-center gap-4">
               <Link to="/" className="flex items-center gap-2">
                 <Scissors className="w-8 h-8 text-primary" />
-                <span className="font-serif text-xl font-bold">Meštar</span>
+                <span className="font-serif text-xl font-bold">Karlo Barbershop</span>
               </Link>
               <span className="text-muted-foreground">|</span>
               <span className="text-sm font-medium">Nadzorna Ploča</span>
