@@ -6,7 +6,7 @@ import { hr } from 'date-fns/locale';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
-import { Service, Barber, BookingState } from '@/types/database';
+import { Service, Barber, BookingState, BlockedDate } from '@/types/database';
 import { Button } from './ui/button';
 import { ServiceCard } from './ServiceCard';
 import { BarberCard } from './BarberCard';
@@ -38,11 +38,13 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
   const [services, setServices] = useState<Service[]>([]);
   const [barbers, setBarbers] = useState<Barber[]>([]);
   const [bookedSlots, setBookedSlots] = useState<string[]>([]);
+  const [blockedDates, setBlockedDates] = useState<string[]>([]);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchServices();
     fetchBarbers();
+    fetchBlockedDates();
   }, []);
 
   useEffect(() => {
@@ -74,6 +76,16 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
     }
   };
 
+  const fetchBlockedDates = async () => {
+    const { data, error } = await supabase
+      .from('blocked_dates')
+      .select('blocked_date');
+
+    if (!error && data) {
+      setBlockedDates(data.map(d => d.blocked_date));
+    }
+  };
+
   const fetchBookedSlots = async () => {
     if (!booking.barber || !booking.date) return;
 
@@ -85,7 +97,27 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
       .neq('status', 'cancelled');
 
     if (!error && data) {
-      setBookedSlots(data.map(a => a.appointment_time));
+      const bookedTimes = data.map(a => a.appointment_time);
+      
+      // Fetch blocked hours for this specific date
+      const { data: blockedHoursData } = await supabase
+        .from('blocked_hours')
+        .select('blocked_time')
+        .eq('blocked_date', format(booking.date, 'yyyy-MM-dd'));
+      
+      // Normalize blocked times to HH:mm format (remove seconds)
+      const blockedTimes = (blockedHoursData || []).map(b => {
+        const time = b.blocked_time;
+        if (typeof time === 'string') {
+          return time.substring(0, 5); // "12:00:00" -> "12:00"
+        }
+        return time;
+      });
+      
+      // Add permanently blocked times (12:00 and 12:30)
+      const permanentlyBlockedTimes = ['12:00', '12:30'];
+      
+      setBookedSlots([...bookedTimes, ...blockedTimes, ...permanentlyBlockedTimes]);
     }
   };
 
@@ -247,6 +279,7 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
                 <DatePicker
                   selected={booking.date}
                   onSelect={(date) => setBooking(prev => ({ ...prev, date, time: null }))}
+                  blockedDates={blockedDates}
                 />
                 {booking.date && (
                   <TimeSlotPicker
@@ -337,3 +370,4 @@ export function BookingFlow({ onComplete, onAuthRequired }: BookingFlowProps) {
     </div>
   );
 }
+

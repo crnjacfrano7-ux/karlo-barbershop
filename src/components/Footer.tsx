@@ -9,8 +9,8 @@ export function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <Link to="/" className="flex items-center gap-2 mb-4">
-              <img src="/favicon.png" alt="Meštar Barber Shop" className="w-10 h-10 object-contain" />
-              <span className="font-serif text-xl font-bold">Meštar Barber Shop</span>
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="w-8 h-8 text-primary"><circle cx="6" cy="6" r="3"></circle><path d="M8.12 8.12 12 12"></path><path d="M20 4 8.12 15.88"></path><circle cx="6" cy="18" r="3"></circle><path d="M14.8 14.8 20 20"></path></svg>
+              <span className="font-serif text-xl font-bold">Karlo Barbershop</span>
             </Link>
             <p className="text-muted-foreground text-sm">
               Premium frizerski salon s iskusnim frizerom i modernim stilom.
@@ -43,13 +43,11 @@ export function Footer() {
           <div>
             <h4 className="font-serif font-semibold mb-4">Kontakt</h4>
             <ul className="space-y-3">
-              <li className="flex items-center gap-2 text-muted-foreground text-sm">Solde 9, Međugorje
+              <li className="flex items-center gap-2 text-muted-foreground text-sm">čitluk
                 <MapPin className="w-4 h-4 text-primary" />
-                Biskupa Čule bb, Mostar
               </li>
-              <li className="flex items-center gap-2 text-muted-foreground text-sm">063 878-211
+              <li className="flex items-center gap-2 text-muted-foreground text-sm">063 608 636
                 <Phone className="w-4 h-4 text-primary" />
-                063 629-436
               </li>
             </ul>
           </div>
@@ -60,11 +58,9 @@ export function Footer() {
             <ul className="space-y-2">
               <li className="flex items-center gap-2 text-muted-foreground text-sm">
                 <Clock className="w-4 h-4 text-primary" />
-                <span>Pon - Pet: 8:30 - 18:00</span>
+                <span>Pon - Sub: 8:00 - 19:00</span>
               </li>
-              <li className="text-muted-foreground text-sm pl-6">
-                Sub: 8:00 - 14:00
-              </li>
+              
               <li className="text-muted-foreground text-sm pl-6">
                 Ned: Zatvoreno
               </li>
@@ -73,7 +69,8 @@ export function Footer() {
         </div>
 
         <div className="border-t border-border mt-12 pt-8 text-center text-sm text-muted-foreground">
-          <p>&copy; {new Date().getFullYear()} Meštar Barber Shop. Sva prava pridržana.</p>
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" className="w-8 h-8 text-primary mx-auto mb-2"><circle cx="6" cy="6" r="3"></circle><path d="M8.12 8.12 12 12"></path><path d="M20 4 8.12 15.88"></path><circle cx="6" cy="18" r="3"></circle><path d="M14.8 14.8 20 20"></path></svg>
+          <p>&copy; {new Date().getFullYear()} Karlo Barbershop. Sva prava pridržana.</p>
         </div>
       </div>
     </footer>);

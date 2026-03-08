@@ -151,7 +151,8 @@ export default {
   		backgroundImage: {
   			'gradient-primary': 'linear-gradient(135deg, hsl(220, 70%, 50%) 0%, hsl(220, 80%, 40%) 100%)',
   			'gradient-accent': 'linear-gradient(135deg, hsl(0, 75%, 55%) 0%, hsl(0, 80%, 45%) 100%)',
-  			'gradient-section': 'linear-gradient(180deg, hsl(220, 10%, 96%) 0%, hsl(0, 0%, 98%) 100%)'
+			'gradient-section': 'linear-gradient(180deg, hsl(220, 10%, 96%) 0%, hsl(0, 0%, 98%) 100%)',
+			'dark-gradient-section': 'linear-gradient(180deg, hsl(220, 15%, 14%) 0%, hsl(0, 0%, 9%) 100%)'
   		},
   		boxShadow: {
   			primary: '0 4px 30px -5px hsla(220, 70%, 50%, 0.25)',

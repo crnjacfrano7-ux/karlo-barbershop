@@ -12,9 +12,9 @@ interface TimeSlotPickerProps {
 // Generate time slots based on day
 const generateTimeSlots = (isSaturday: boolean) => {
   const slots: string[] = [];
-  const startHour = isSaturday ? 8 : 8;
-  const startMinute = isSaturday ? 0 : 30;
-  const endHour = isSaturday ? 14 : 18;
+  const startHour = 8;
+  const startMinute = 0;
+  const endHour = 19;
   
   let hour = startHour;
   let minute = startMinute;
@@ -28,7 +28,8 @@ const generateTimeSlots = (isSaturday: boolean) => {
     }
   }
   
-  return slots;
+  // Remove 12:00 and 12:30 from available slots
+  return slots.filter(time => time !== '12:00' && time !== '12:30');
 };
 
 const formatTime = (time: string) => {
